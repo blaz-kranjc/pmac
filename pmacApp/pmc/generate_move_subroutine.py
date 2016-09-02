@@ -26,7 +26,9 @@ def pmc_contents():
       '    Q98 = Y_Vel',
       '    Q79 = Current_Z',
       '    Q99 = Z_Vel',
-      '\n'.join(map(lambda line: '    '+line, if_tree(0, 512).split('\n'))),
+      '    GOTO ('+str(offset())+' + Axes)',
+      goto_list(1, 512),
+      'N'+str(offset() + 512),
       '    TotalPoints = TotalPoints + 1',
       'Return',
       '',
@@ -34,28 +36,32 @@ def pmc_contents():
     ])+'\n'
 
 
-def if_tree(l, h):
+def offset():
+  return 500
+
+
+def goto_list(l, h):
   # Base cases.
-  if l + 1 == h: return ' '.join(sorted(map(str, {k: v for k, v in {
-      1  : 'A(Q71):(Q91)',
-      2  : 'B(Q72):(Q92)',
-      4  : 'C(Q73):(Q93)',
-      8  : 'U(Q74):(Q94)',
-      16 : 'V(Q75):(Q95)',
-      32 : 'W(Q76):(Q96)',
-      64 : 'X(Q77):(Q97)',
-      128: 'Y(Q78):(Q98)',
-      256: 'Z(Q79):(Q99)',
-    }.items() if h-1 & k}.values())))
+  if l + 1 == h: return (
+      'N'+str(offset()+l)+'\n'
+      +'    '+' '.join(sorted(map(str, {k: v for k, v in {
+          1  : 'A(Q71):(Q91)',
+          2  : 'B(Q72):(Q92)',
+          4  : 'C(Q73):(Q93)',
+          8  : 'U(Q74):(Q94)',
+          16 : 'V(Q75):(Q95)',
+          32 : 'W(Q76):(Q96)',
+          64 : 'X(Q77):(Q97)',
+          128: 'Y(Q78):(Q98)',
+          256: 'Z(Q79):(Q99)',
+        }.items() if h-1 & k}.values())))+'\n'
+      +'    '+'GOTO '+str(offset() + 512)
+    )
 
   # Other cases.
-  def indent(line): return ' '+line
   return (
-      'If(Axes | '+str((h-l)/2)+' = 0)\n'
-      +'\n'.join(map(indent, if_tree(l, l+(h-l)/2).split('\n')))+'\n'
-      +'Else\n'
-      +'\n'.join(map(indent, if_tree(l+(h-l)/2, h).split('\n')))+'\n'
-      +'Endif'
+      '\n'.join(goto_list(l, l+1).split('\n'))+'\n'
+      +'\n'.join(goto_list(l+1, h).split('\n'))
     )
 
 
