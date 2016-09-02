@@ -32,11 +32,7 @@ N108
          If(Axes | 8 = 0)
           If(Axes | 4 = 0)
            If(Axes | 2 = 0)
-            If(Axes | 1 = 0)
-             
-            Else
-             A(Q71):(Q91)
-            Endif
+            A(Q71):(Q91)
            Else
             If(Axes | 1 = 0)
              B(Q72):(Q92)

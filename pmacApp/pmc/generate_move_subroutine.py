@@ -35,6 +35,9 @@ def pmc_contents():
 
 
 def if_tree(l, h):
+  # Special case (because PMAC can't cope with an empty "then" clause).
+  if l == 0 and h == 2: return 'A(Q71):(Q91)'
+
   # Base cases.
   if l + 1 == h: return ' '.join(sorted(map(str, {k: v for k, v in {
       1  : 'A(Q71):(Q91)',
