@@ -26,7 +26,7 @@ N108
     Q98 = Y_Vel
     Q79 = Current_Z
     Q99 = Z_Vel
-    Call (500 + Axes)
+    Call (200 + Axes)
     TotalPoints = TotalPoints + 1
 Return
 

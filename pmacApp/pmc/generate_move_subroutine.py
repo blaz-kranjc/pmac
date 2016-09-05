@@ -42,7 +42,7 @@ def pmc_contents():
 
 
 def offset():
-  return 500
+  return 200
 
 
 def move_programs(l=1, h=512):
